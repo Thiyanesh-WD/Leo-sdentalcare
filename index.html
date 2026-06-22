@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LEO's Dental Care</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white:    #FFFFFF;
+    --ice:      #F0F7FA;
+    --sky:      #D6EEF7;
+    --blue:     #2A8FC4;
+    --blue-mid: #1B6FA0;
+    --blue-deep:#0D3D5A;
+    --slate:    #4A6A7C;
+    --text:     #1A2E3A;
+    --muted:    #6B8A99;
+    --border:   #C8E0ED;
+    --gold:     #C9A96E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(42,143,196,0.10);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--blue-deep);
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 0.875rem; font-weight: 500;
+    color: var(--slate); letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta {
+    background: var(--blue); color: var(--white);
+    border: none; padding: 11px 26px; border-radius: 50px;
+    font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--blue-mid); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: linear-gradient(150deg, #EAF5FB 0%, #F7FBFD 55%, #DDEEF7 100%);
+    display: flex; align-items: center;
+    padding: 120px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+
+  /* Signature: animated floating circle grid — clinical dot-matrix */
+  .dot-grid {
+    position: absolute; top: 0; right: 0; width: 52%; height: 100%;
+    pointer-events: none;
+  }
+  .dot-grid canvas { width: 100%; height: 100%; }
+
+  /* Animated pulse ring behind tooth SVG */
+  .hero-visual {
+    position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+    width: 380px; height: 380px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue);
+    opacity: 0;
+    animation: pulse-out 3s ease-out infinite;
+  }
+  .pulse-ring:nth-child(1) { width: 220px; height: 220px; animation-delay: 0s; }
+  .pulse-ring:nth-child(2) { width: 300px; height: 300px; animation-delay: 0.8s; }
+  .pulse-ring:nth-child(3) { width: 380px; height: 380px; animation-delay: 1.6s; }
+  @keyframes pulse-out {
+    0%   { opacity: 0.5; transform: scale(0.85); }
+    100% { opacity: 0;   transform: scale(1.1); }
+  }
+
+  .tooth-svg {
+    position: relative; z-index: 2;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(42,143,196,0.22));
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-14px); }
+  }
+
+  .hero-content { max-width: 540px; position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 500;
+    color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0; animation: fade-up 0.7s 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 28px; height: 1.5px; background: var(--blue);
+  }
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 700; line-height: 1.08;
+    letter-spacing: -0.03em; color: var(--blue-deep);
+    margin-bottom: 24px;
+    opacity: 0; animation: fade-up 0.7s 0.4s forwards;
+  }
+  .hero-h1 em { font-style: italic; color: var(--blue); }
+  .hero-sub {
+    font-size: 1.075rem; line-height: 1.7; color: var(--slate);
+    margin-bottom: 40px; font-weight: 400;
+    opacity: 0; animation: fade-up 0.7s 0.6s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0; animation: fade-up 0.7s 0.8s forwards;
+  }
+  .btn-primary {
+    background: var(--blue); color: #fff;
+    padding: 15px 34px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 600; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--blue-mid); transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--blue-deep); font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+    transition: gap 0.2s;
+  }
+  .btn-ghost:hover { gap: 12px; }
+  .btn-ghost svg { transition: transform 0.2s; }
+  .btn-ghost:hover svg { transform: translateX(4px); }
+
+  .hero-stats {
+    margin-top: 56px; display: flex; gap: 40px;
+    opacity: 0; animation: fade-up 0.7s 1s forwards;
+  }
+  .stat-item { border-left: 2px solid var(--border); padding-left: 16px; }
+  .stat-num {
+    font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500;
+    color: var(--blue-deep); line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SERVICES ── */
+  #services {
+    padding: 110px 60px;
+    background: var(--white);
+  }
+  .section-header { text-align: center; margin-bottom: 64px; }
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 500;
+    color: var(--blue); letter-spacing: 0.14em; text-transform: uppercase;
+    display: block; margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700; color: var(--blue-deep);
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .section-sub {
+    margin-top: 14px; font-size: 1rem; color: var(--muted); max-width: 500px;
+    margin-left: auto; margin-right: auto; line-height: 1.7;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .service-card {
+    background: var(--ice);
+    border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 36px 32px;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    cursor: default; position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--sky));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(42,143,196,0.13); border-color: var(--blue); }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px;
+  }
+  .service-icon svg { color: white; }
+  .service-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 600; color: var(--blue-deep);
+    margin-bottom: 10px;
+  }
+  .service-desc { font-size: 0.9rem; color: var(--slate); line-height: 1.65; }
+
+  /* ── ABOUT ── */
+  #about {
+    padding: 110px 60px;
+    background: linear-gradient(135deg, var(--blue-deep) 0%, #0A2E45 100%);
+    color: white;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .about-label {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: 18px; display: block;
+  }
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.02em; margin-bottom: 22px;
+  }
+  .about-body { font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.72); margin-bottom: 36px; }
+  .about-features { display: flex; flex-direction: column; gap: 16px; }
+  .about-feature {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 0.92rem; color: rgba(255,255,255,0.85);
+  }
+  .about-feature-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--blue); flex-shrink: 0;
+  }
+  .about-visual {
+    position: relative; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .about-card-stack { position: relative; width: 340px; height: 380px; }
+  .about-card {
+    position: absolute; border-radius: 20px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+  }
+  .about-card.main {
+    width: 280px; height: 320px; top: 30px; left: 30px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+    padding: 32px;
+  }
+  .about-card.accent-1 {
+    width: 130px; height: 80px; top: 0; right: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--blue); border-color: transparent;
+  }
+  .about-card.accent-2 {
+    width: 130px; height: 80px; bottom: 0; left: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.12);
+  }
+  .about-big-num {
+    font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500;
+    color: white; line-height: 1;
+  }
+  .about-card-label { font-size: 0.72rem; color: rgba(255,255,255,0.7); text-align: center; }
+  .about-teeth-icon { font-size: 3rem; }
+
+  /* ── TEAM ── */
+  #team { padding: 110px 60px; background: var(--ice); }
+  .team-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .team-card {
+    background: white; border-radius: 20px; overflow: hidden;
+    border: 1.5px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .team-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(42,143,196,0.13); }
+  .team-avatar {
+    height: 200px;
+    background: linear-gradient(135deg, var(--sky) 0%, var(--border) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+  }
+  .team-info { padding: 22px 24px; }
+  .team-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 600; color: var(--blue-deep); margin-bottom: 4px;
+  }
+  .team-role { font-size: 0.8rem; color: var(--blue); font-weight: 500; margin-bottom: 10px; }
+  .team-bio { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── GALLERY ── */
+  #gallery { padding: 110px 60px; background: white; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px; max-width: 1100px; margin: 0 auto;
+  }
+  .gallery-item {
+    border-radius: 16px; overflow: hidden;
+    position: relative; cursor: pointer;
+    background: linear-gradient(135deg, var(--sky), var(--border));
+    transition: transform 0.25s;
+  }
+  .gallery-item:hover { transform: scale(1.02); }
+  .gallery-item:first-child { grid-row: span 2; }
+  .gallery-placeholder {
+    width: 100%; height: 100%; min-height: 200px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px; padding: 30px;
+  }
+  .gallery-item:first-child .gallery-placeholder { min-height: 420px; }
+  .gallery-icon { font-size: 2.5rem; opacity: 0.5; }
+  .gallery-caption {
+    font-size: 0.8rem; color: var(--blue-mid); font-weight: 500;
+    text-align: center; opacity: 0.8;
+  }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { padding: 110px 60px; background: var(--ice); }
+  .testimonials-track {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .testimonial-card {
+    background: white; border-radius: 20px; padding: 34px 30px;
+    border: 1.5px solid var(--border);
+    transition: box-shadow 0.25s;
+  }
+  .testimonial-card:hover { box-shadow: 0 12px 40px rgba(42,143,196,0.12); }
+  .stars { color: #F5B93E; font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .testimonial-text {
+    font-size: 0.95rem; line-height: 1.72; color: var(--slate);
+    margin-bottom: 22px; font-style: italic;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .author-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .author-name { font-weight: 600; font-size: 0.9rem; color: var(--blue-deep); }
+  .author-since { font-size: 0.75rem; color: var(--muted); }
+
+  /* ── FAQ ── */
+  #faq { padding: 110px 60px; background: white; }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1.5px solid var(--border);
+    padding: 26px 0;
+  }
+  .faq-question {
+    width: 100%; background: none; border: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
+    color: var(--blue-deep); text-align: left; gap: 16px;
+    padding: 0;
+  }
+  .faq-question:hover { color: var(--blue); }
+  .faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sky); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1.1rem; font-weight: 300;
+    transition: transform 0.3s, background 0.2s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--blue); color: white; }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    font-size: 0.94rem; color: var(--slate); line-height: 1.72;
+  }
+  .faq-item.open .faq-answer { max-height: 300px; padding-top: 14px; }
+
+  /* ── BOOKING / CONTACT ── */
+  #contact {
+    padding: 110px 60px;
+    background: linear-gradient(150deg, var(--blue-deep) 0%, #0A2E45 100%);
+    color: white;
+  }
+  .contact-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+  .contact-info .section-eyebrow { color: var(--sky); }
+  .contact-info .section-title { color: white; text-align: left; }
+  .contact-info .section-sub { color: rgba(255,255,255,0.65); text-align: left; margin: 14px 0 36px; }
+  .contact-detail {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 22px; font-size: 0.92rem; color: rgba(255,255,255,0.8);
+  }
+  .contact-detail-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+  .contact-detail strong { display: block; color: white; font-size: 0.82rem; margin-bottom: 2px; }
+
+  .booking-form {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 24px; padding: 40px;
+    backdrop-filter: blur(10px);
+  }
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 600; margin-bottom: 28px;
+    color: white;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 0.78rem; font-weight: 500;
+    color: rgba(255,255,255,0.6); margin-bottom: 7px; letter-spacing: 0.04em;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 10px; padding: 12px 16px;
+    color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--blue); }
+  .form-group select option { background: var(--blue-deep); }
+  .form-group textarea { resize: none; height: 90px; }
+  .btn-book {
+    width: 100%; background: var(--blue); color: white;
+    border: none; padding: 15px; border-radius: 50px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    margin-top: 6px;
+  }
+  .btn-book:hover { background: var(--blue-mid); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--blue-deep); color: rgba(255,255,255,0.5);
+    padding: 36px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem;
+    color: white; font-weight: 700;
+  }
+  .footer-logo span { color: var(--blue); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+  .footer-links a:hover { color: white; }
+  .footer-copy { font-size: 0.78rem; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 110px 24px 80px; }
+    .hero-visual { display: none; }
+    #services, #team, #gallery, #testimonials, #faq, #contact { padding: 80px 24px; }
+    #about { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item:first-child { grid-row: span 1; }
+    .testimonials-track { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+
+  /* ── WHATSAPP FLOATING BUTTON ── */
+  .whatsapp-btn {
+    position: fixed; bottom: 28px; right: 28px; z-index: 999;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+  .whatsapp-btn svg { width: 30px; height: 30px; }
+  .whatsapp-pulse {
+    position: absolute; width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(37,211,102,0.4);
+    animation: wa-pulse 2s ease-out infinite;
+  }
+  @keyframes wa-pulse {
+    0%   { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+  .whatsapp-tooltip {
+    position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+    background: #0D3D5A; color: white;
+    font-size: 0.78rem; font-weight: 500;
+    padding: 6px 12px; border-radius: 8px; white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .whatsapp-tooltip::after {
+    content: ''; position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+    border: 6px solid transparent; border-left-color: #0D3D5A;
+  }
+  .whatsapp-btn:hover .whatsapp-tooltip { opacity: 1; }
+
+  /* ── BACK TO TOP BUTTON ── */
+  .back-top-btn {
+    position: fixed; bottom: 96px; right: 30px; z-index: 999;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #2A8FC4; color: white; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(42,143,196,0.35);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s, box-shadow 0.2s;
+  }
+  .back-top-btn.visible { opacity: 1; pointer-events: auto; }
+  .back-top-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(42,143,196,0.45); }
+  .back-top-btn svg { width: 20px; height: 20px; }
+
+  /* ── COOKIE BANNER ── */
+  .cookie-banner {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+    background: #0D3D5A;
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+  }
+  .cookie-banner.hidden { transform: translateY(110%); }
+  .cookie-text {
+    font-size: 0.88rem; color: rgba(255,255,255,0.82); line-height: 1.6; flex: 1;
+  }
+  .cookie-text a { color: #2A8FC4; text-decoration: underline; }
+  .cookie-actions { display: flex; gap: 12px; flex-shrink: 0; }
+  .cookie-accept {
+    background: #2A8FC4; color: white; border: none;
+    padding: 10px 22px; border-radius: 50px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .cookie-accept:hover { background: #1B6FA0; }
+  .cookie-decline {
+    background: transparent; color: rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 10px 22px; border-radius: 50px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  }
+  .cookie-decline:hover { border-color: rgba(255,255,255,0.6); color: white; }
+  @media (max-width: 600px) {
+    .cookie-banner { flex-direction: column; padding: 20px 20px; align-items: flex-start; }
+    .cookie-actions { width: 100%; }
+    .cookie-accept, .cookie-decline { flex: 1; text-align: center; }
+  }
+
+  /* ── GOOGLE MAPS ── */
+  .map-wrapper {
+    margin-top: 28px; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  .map-wrapper iframe { display: block; width: 100%; height: 380px; border: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">LEO's <span>Dental</span> Care</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#team">Our Team</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book Appointment</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-visual">
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <!-- Signature tooth SVG -->
+    <svg class="tooth-svg" width="160" height="180" viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 8C56 8 28 22 20 52C14 72 16 96 22 116C28 136 36 164 48 164C58 164 62 148 70 140C74 136 77 134 80 134C83 134 86 136 90 140C98 148 102 164 112 164C124 164 132 136 138 116C144 96 146 72 140 52C132 22 104 8 80 8Z" fill="#EAF5FB" stroke="#2A8FC4" stroke-width="3"/>
+      <path d="M60 50C60 50 56 70 58 88" stroke="#2A8FC4" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M100 50C100 50 104 70 102 88" stroke="#2A8FC4" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <ellipse cx="80" cy="46" rx="26" ry="14" fill="#D6EEF7" opacity="0.6"/>
+      <circle cx="80" cy="46" r="6" fill="#2A8FC4" opacity="0.25"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Your Smile, Our Craft</div>
+    <h1 class="hero-h1">Care that makes you <em>smile</em> brighter</h1>
+    <p class="hero-sub">At LEO's Dental Care, we combine clinical precision with a gentle, patient-first approach — so every visit leaves you more confident than you arrived.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Book a Visit</a>
+      <a href="#services" class="btn-ghost">
+        Explore Services
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Years of practice</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4,800+</div>
+        <div class="stat-label">Happy patients</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Satisfaction rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">What we offer</span>
+    <h2 class="section-title">Comprehensive dental services</h2>
+    <p class="section-sub">From routine check-ups to full smile transformations — all under one roof.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8 2 5 5 5 9c0 5 3 9 7 13 4-4 7-8 7-13 0-4-3-7-7-7z"/>
+        </svg>
+      </div>
+      <div class="service-name">General Check-ups</div>
+      <p class="service-desc">Thorough examinations, digital X-rays, and professional cleaning to keep your teeth healthy and catch problems early.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+      </div>
+      <div class="service-name">Teeth Whitening</div>
+      <p class="service-desc">Professional-grade whitening treatments that deliver visibly brighter results — safely and gently in just one session.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 9h6M9 15h4"/>
+        </svg>
+      </div>
+      <div class="service-name">Dental Implants</div>
+      <p class="service-desc">Permanent, natural-looking replacements for missing teeth — restoring full function and confidence in your smile.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/>
+        </svg>
+      </div>
+      <div class="service-name">Orthodontics</div>
+      <p class="service-desc">Clear aligners and traditional braces tailored to your lifestyle — for a straighter smile at any age.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+        </svg>
+      </div>
+      <div class="service-name">Cosmetic Dentistry</div>
+      <p class="service-desc">Veneers, bonding, and smile design services to reshape and perfect the smile you've always envisioned.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div class="service-name">Root Canal Therapy</div>
+      <p class="service-desc">Precise, pain-managed treatment to save infected teeth and relieve discomfort — with a success rate that speaks for itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-content reveal">
+    <span class="about-label">Why choose us</span>
+    <h2 class="about-title">Where clinical excellence meets genuine care</h2>
+    <p class="about-body">LEO's Dental Care was founded on a simple belief: that world-class dentistry should feel reassuring, not clinical. Every tool, every protocol, every conversation is designed around your comfort and confidence.</p>
+    <div class="about-features">
+      <div class="about-feature"><div class="about-feature-dot"></div>State-of-the-art digital X-ray & 3D scanning technology</div>
+      <div class="about-feature"><div class="about-feature-dot"></div>Same-day emergency appointments always available</div>
+      <div class="about-feature"><div class="about-feature-dot"></div>Flexible payment plans & all major insurance accepted</div>
+      <div class="about-feature"><div class="about-feature-dot"></div>Gentle sedation options for anxious patients</div>
+    </div>
+  </div>
+  <div class="about-visual reveal reveal-delay-2">
+    <div class="about-card-stack">
+      <div class="about-card main">
+        <div class="about-teeth-icon">🦷</div>
+        <div style="text-align:center">
+          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;margin-bottom:6px">LEO's Dental Care</div>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);line-height:1.5">Trusted by families<br>across the community</div>
+        </div>
+      </div>
+      <div class="about-card accent-1">
+        <div class="about-big-num">4.9★</div>
+        <div class="about-card-label">Google Rating</div>
+      </div>
+      <div class="about-card accent-2">
+        <div class="about-big-num">12yr</div>
+        <div class="about-card-label">Est. 2012</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Meet the team</span>
+    <h2 class="section-title">Specialists you can trust</h2>
+    <p class="section-sub">Our dentists bring decades of combined experience and a shared passion for patient wellbeing.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-avatar">👨‍⚕️</div>
+      <div class="team-info">
+        <div class="team-name">Dr. Leo Martins</div>
+        <div class="team-role">Founder & Principal Dentist</div>
+        <div class="team-bio">BDS, MDS with 15+ years specialising in restorative dentistry and smile transformations.</div>
+      </div>
+    </div>
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-avatar">👩‍⚕️</div>
+      <div class="team-info">
+        <div class="team-name">Dr. Sarah Chen</div>
+        <div class="team-role">Orthodontist</div>
+        <div class="team-bio">Expert in Invisalign and traditional braces, helping patients achieve perfectly aligned smiles.</div>
+      </div>
+    </div>
+    <div class="team-card reveal reveal-delay-3">
+      <div class="team-avatar">👨‍⚕️</div>
+      <div class="team-info">
+        <div class="team-name">Dr. James Osei</div>
+        <div class="team-role">Oral Surgeon</div>
+        <div class="team-bio">Specialist in implants and complex extractions, with a precision-first, pain-minimal approach.</div>
+      </div>
+    </div>
+    <div class="team-card reveal reveal-delay-4">
+      <div class="team-avatar">👩‍⚕️</div>
+      <div class="team-info">
+        <div class="team-name">Dr. Priya Nair</div>
+        <div class="team-role">Cosmetic Dentist</div>
+        <div class="team-bio">Combining artistry and science to craft veneers and bonding work that look entirely natural.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Our clinic</span>
+    <h2 class="section-title">A space designed for comfort</h2>
+    <p class="section-sub">Modern, calm, and welcoming — built so you feel at ease from the moment you walk in.</p>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-icon">🏥</div>
+        <div class="gallery-caption">Reception & Waiting Area</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-icon">🦷</div>
+        <div class="gallery-caption">Treatment Suite 1</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-icon">🔬</div>
+        <div class="gallery-caption">Digital Imaging Lab</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-icon">😁</div>
+        <div class="gallery-caption">Smile Gallery — Before & After</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-icon">🛋️</div>
+        <div class="gallery-caption">Private Consultation Room</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Patient stories</span>
+    <h2 class="section-title">Thousands of happier smiles</h2>
+    <p class="section-sub">Don't take our word for it — hear from the patients who trust us with their smiles.</p>
+  </div>
+  <div class="testimonials-track">
+    <div class="testimonial-card reveal reveal-delay-1">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"I'd avoided the dentist for years out of anxiety. Dr. Martins and his team made the whole experience so calm and reassuring. I actually look forward to my appointments now."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">RM</div>
+        <div>
+          <div class="author-name">Rachel M.</div>
+          <div class="author-since">Patient since 2019</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"My veneers are perfect. Dr. Nair took the time to understand exactly what I wanted, and the result exceeded every expectation. I feel completely different about my smile."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">TK</div>
+        <div>
+          <div class="author-name">Tom K.</div>
+          <div class="author-since">Patient since 2021</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-3">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"Same-day emergency appointment when I cracked a tooth on a Sunday. Extraordinary service. The whole family has been coming here ever since. We wouldn't go anywhere else."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AJ</div>
+        <div>
+          <div class="author-name">Aisha J.</div>
+          <div class="author-since">Patient since 2020</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Common questions</span>
+    <h2 class="section-title">Everything you need to know</h2>
+    <p class="section-sub">Can't find your answer here? Call us — we're always happy to help.</p>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-question">
+        How often should I visit the dentist?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">We recommend a check-up and professional clean every six months for most adults. Patients with gum disease, a history of decay, or orthodontic work may benefit from more frequent visits — we'll advise you personally at your first appointment.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        Do you accept health insurance?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Yes — we're registered providers with all major dental insurers. Our reception team will happily check your specific entitlements and process your claim directly, so you never have to deal with the paperwork.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        Is teeth whitening safe?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Absolutely. Our professional whitening uses clinically tested concentrations and includes a pre-treatment check to ensure your enamel and gums are healthy enough to proceed. It's far safer — and more effective — than over-the-counter alternatives.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        What should I expect from my first visit?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Your first visit typically takes 60–75 minutes and includes a comprehensive oral exam, digital X-rays, a professional clean, and a personalised treatment plan. We'll walk you through everything we find and answer all your questions before suggesting any next steps.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        Do you treat nervous or anxious patients?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">This is something we take seriously. We offer gentle sedation options, can pace treatments to your comfort level, and our team are trained specifically in managing dental anxiety. Many of our most loyal patients started as anxious ones.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        Are payment plans available?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Yes. We offer interest-free payment plans on treatments over a certain value, and work with several dental finance partners. We believe cost should never be a barrier to a healthy smile — speak to our team for a tailored arrangement.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / BOOKING -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <span class="section-eyebrow">Get in touch</span>
+      <h2 class="section-title" style="color:white;font-size:clamp(1.9rem,3vw,2.6rem)">Book your appointment today</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.65);text-align:left;margin-left:0">Ready for a healthier, brighter smile? We'd love to meet you. Reach out or book directly — new patients always welcome.</p>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📍</div>
+        <div><strong>Location</strong>24 Bright Street, Suite 3, Melbourne VIC 3000</div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📞</div>
+        <div><strong>Phone</strong>(03) 9123 4567</div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">✉️</div>
+        <div><strong>Email</strong>hello@leosdentalcare.com.au</div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">🕐</div>
+        <div><strong>Hours</strong>Mon–Fri 8am–6pm · Sat 9am–2pm · Emergency Sun</div>
+      </div>
+      <!-- Google Maps Embed -->
+      <div class="map-wrapper">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.95373531531676!3d-37.81720997975172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d4c2b349649%3A0xb6899234e561db11!2sMelbourne%20VIC%203000%2C%20Australia!5e0!3m2!1sen!2sau!4v1234567890"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="LEO's Dental Care Location">
+        </iframe>
+      </div>
+    </div>
+    <div class="booking-form reveal reveal-delay-2">
+      <div class="form-title">Request an Appointment</div>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Jane"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"/></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@example.com"/></div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="(04) 0000 0000"/></div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <select>
+          <option value="">Select a service…</option>
+          <option>General Check-up & Clean</option>
+          <option>Teeth Whitening</option>
+          <option>Dental Implants</option>
+          <option>Orthodontics</option>
+          <option>Cosmetic Dentistry</option>
+          <option>Emergency Appointment</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Preferred Date</label><input type="date"/></div>
+      <div class="form-group"><label>Additional Notes</label><textarea placeholder="Any specific concerns or questions?"></textarea></div>
+      <button class="btn-book">Request Appointment →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">LEO's <span>Dental</span> Care</div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#team">Team</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+    <a href="#">Privacy</a>
+  </div>
+  <div class="footer-copy">© 2025 LEO's Dental Care. All rights reserved.</div>
+</footer>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/XXXXXXXXXX" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Chat with us on WhatsApp">
+  <div class="whatsapp-pulse"></div>
+  <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2C8.268 2 2 8.268 2 16c0 2.498.658 4.845 1.806 6.873L2 30l7.34-1.779A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.45 11.45 0 0 1-5.845-1.601l-.418-.249-4.356 1.055 1.083-4.24-.274-.436A11.469 11.469 0 0 1 4.5 16C4.5 9.649 9.649 4.5 16 4.5S27.5 9.649 27.5 16 22.351 27.5 16 27.5zm6.29-8.618c-.344-.172-2.036-1.004-2.351-1.118-.316-.115-.546-.172-.776.172-.23.344-.891 1.118-1.092 1.348-.2.23-.402.258-.746.086-.344-.172-1.452-.535-2.767-1.707-1.022-.912-1.713-2.038-1.913-2.382-.2-.344-.021-.53.15-.701.155-.154.344-.402.516-.603.172-.2.23-.344.344-.573.115-.23.058-.43-.029-.603-.086-.172-.776-1.87-1.063-2.561-.28-.673-.564-.582-.776-.593l-.66-.011c-.23 0-.603.086-.918.43-.316.344-1.206 1.177-1.206 2.87s1.235 3.33 1.407 3.56c.172.23 2.43 3.71 5.888 5.205.823.355 1.465.567 1.966.726.826.263 1.578.226 2.172.137.663-.099 2.036-.832 2.323-1.635.287-.803.287-1.491.2-1.635-.086-.143-.316-.23-.66-.402z"/>
+  </svg>
+  <span class="whatsapp-tooltip">Chat with us!</span>
+</a>
+
+<!-- BACK TO TOP BUTTON -->
+<button class="back-top-btn" id="backTopBtn" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <p class="cookie-text">
+    &#x1F36A; We use cookies to improve your experience. By continuing, you agree to our <a href="#">cookie policy</a>.
+  </p>
+  <div class="cookie-actions">
+    <button class="cookie-accept" id="cookieAccept">Accept</button>
+    <button class="cookie-decline" id="cookieDecline">Decline</button>
+  </div>
+</div>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Booking form submit
+  document.querySelector('.btn-book').addEventListener('click', () => {
+    const btn = document.querySelector('.btn-book');
+    btn.textContent = '✓ Request Received — We\'ll be in touch!';
+    btn.style.background = '#1B6FA0';
+    btn.disabled = true;
+  });
+
+  // Back to Top
+  const backTopBtn = document.getElementById('backTopBtn');
+  window.addEventListener('scroll', () => {
+    backTopBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+  backTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Cookie Banner
+  const cookieBanner = document.getElementById('cookieBanner');
+  const cookieAccept = document.getElementById('cookieAccept');
+  const cookieDecline = document.getElementById('cookieDecline');
+  if (localStorage.getItem('cookieConsent')) {
+    cookieBanner.classList.add('hidden');
+  }
+  cookieAccept.addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted');
+    cookieBanner.classList.add('hidden');
+  });
+  cookieDecline.addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'declined');
+    cookieBanner.classList.add('hidden');
+  });
+</script>
+
+<!-- ══════════════════════════════════════
+     LEO'S DENTAL AI CHATBOT
+══════════════════════════════════════ -->
+<style>
+  .chat-bubble-btn {
+    position: fixed; bottom: 170px; right: 28px; z-index: 998;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #2A8FC4; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(42,143,196,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .chat-bubble-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(42,143,196,0.6); }
+  .chat-bubble-btn svg { width: 28px; height: 28px; }
+  .chat-notif {
+    position: absolute; top: -3px; right: -3px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #ef4444; border: 2px solid white;
+    animation: notif-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes notif-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+  .chat-window {
+    position: fixed; bottom: 240px; right: 28px; z-index: 998;
+    width: 350px; height: 480px;
+    background: #fff; border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(13,61,90,0.22);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform: scale(0.85) translateY(20px); opacity: 0; pointer-events: none;
+    transform-origin: bottom right;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+  }
+  .chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+
+  .chat-header {
+    background: linear-gradient(135deg, #0D3D5A 0%, #1B6FA0 100%);
+    padding: 16px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .chat-header-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .chat-header-info { flex: 1; }
+  .chat-header-name { font-family: 'Inter',sans-serif; font-size: 0.9rem; font-weight: 600; color: white; }
+  .chat-header-status { font-size: 0.72rem; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: sblink 2s infinite; }
+  @keyframes sblink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .chat-close-btn {
+    background: rgba(255,255,255,0.12); border: none; cursor: pointer;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1rem; transition: background 0.2s; flex-shrink: 0;
+  }
+  .chat-close-btn:hover { background: rgba(255,255,255,0.25); }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    background: #F0F7FA;
+    scrollbar-width: thin; scrollbar-color: #C8E0ED transparent;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: #C8E0ED; border-radius: 4px; }
+
+  .chat-msg { display: flex; align-items: flex-end; gap: 8px; }
+  .chat-msg.bot { justify-content: flex-start; }
+  .chat-msg.user { justify-content: flex-end; }
+  .msg-avatar {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #2A8FC4, #0D3D5A);
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+  }
+  .msg-bubble {
+    max-width: 76%; padding: 10px 14px; border-radius: 18px;
+    font-family: 'Inter',sans-serif; font-size: 0.85rem; line-height: 1.55;
+  }
+  .chat-msg.bot .msg-bubble {
+    background: white; color: #1A2E3A; border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .chat-msg.user .msg-bubble { background: #2A8FC4; color: white; border-bottom-right-radius: 4px; }
+
+  .typing-dots {
+    background: white; padding: 12px 16px; border-radius: 18px;
+    border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex; gap: 4px; align-items: center;
+  }
+  .typing-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #2A8FC4;
+    animation: tbounce 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes tbounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+
+  .chat-input-area {
+    padding: 12px 14px; background: white; border-top: 1px solid #C8E0ED;
+    display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; border: 1.5px solid #C8E0ED; border-radius: 22px;
+    padding: 10px 14px; font-family: 'Inter',sans-serif; font-size: 0.85rem;
+    color: #1A2E3A; outline: none; resize: none; max-height: 90px; line-height: 1.4;
+    transition: border-color 0.2s; scrollbar-width: none;
+  }
+  .chat-input:focus { border-color: #2A8FC4; }
+  .chat-input::placeholder { color: #6B8A99; }
+  .chat-send-btn {
+    width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+    background: #2A8FC4; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .chat-send-btn:hover { background: #1B6FA0; transform: scale(1.05); }
+  .chat-send-btn:disabled { background: #C8E0ED; cursor: not-allowed; transform: none; }
+  .chat-send-btn svg { width: 17px; height: 17px; color: white; }
+
+  @media (max-width: 480px) {
+    .chat-window { width: calc(100vw - 20px); right: 10px; bottom: 220px; height: 420px; }
+    .chat-bubble-btn { bottom: 160px; right: 20px; }
+  }
+</style>
+
+<!-- Chat Bubble Trigger -->
+<button class="chat-bubble-btn" id="chatBubbleBtn" aria-label="Open chat">
+  <div class="chat-notif"></div>
+  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</button>
+
+<!-- Chat Window -->
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-header-avatar">&#x1F9B7;</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">LEO&#39;s Dental Assistant</div>
+      <div class="chat-header-status"><div class="status-dot"></div>Ask me anything!</div>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn">&#x2715;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" aria-label="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var SYSTEM = "You are a friendly, professional dental assistant chatbot for LEO's Dental Care.\n\n" +
+    "CLINIC INFO:\n" +
+    "- Name: LEO's Dental Care\n" +
+    "- Location: 24 Bright Street, Suite 3, Melbourne VIC 3000\n" +
+    "- Phone: (03) 9123 4567\n" +
+    "- Email: hello@leosdentalcare.com.au\n" +
+    "- Hours: Mon-Fri 8am-6pm, Sat 9am-2pm, Emergency Sunday\n\n" +
+    "SERVICES: General Check-ups, Teeth Whitening, Dental Implants, Orthodontics, Cosmetic Dentistry, Root Canal Therapy\n\n" +
+    "DOCTORS:\n" +
+    "- Dr. Leo Martins - Founder & Principal Dentist (15+ years, restorative dentistry)\n" +
+    "- Dr. Sarah Chen - Orthodontist (Invisalign & braces)\n" +
+    "- Dr. James Osei - Oral Surgeon (implants & extractions)\n" +
+    "- Dr. Priya Nair - Cosmetic Dentist (veneers & bonding)\n\n" +
+    "RULES:\n" +
+    "1. CRITICAL: Always detect and reply in the EXACT same language the patient writes in. Tamil reply in Tamil. Hindi reply in Hindi. Arabic reply in Arabic. Never switch languages.\n" +
+    "2. For pricing say: please contact us for accurate pricing as it varies by treatment.\n" +
+    "3. For booking, guide them to scroll down to the booking form or call (03) 9123 4567.\n" +
+    "4. For dental emergencies, urge them to call immediately.\n" +
+    "5. Be warm, concise, and reassuring especially for anxious patients.\n" +
+    "6. Keep replies under 150 words.\n" +
+    "7. Never make up medical advice. For clinical questions recommend a consultation.";
+
+  var messagesEl = document.getElementById("chatMessages");
+  var inputEl    = document.getElementById("chatInput");
+  var sendBtn    = document.getElementById("chatSendBtn");
+  var chatWindow = document.getElementById("chatWindow");
+  var bubbleBtn  = document.getElementById("chatBubbleBtn");
+  var closeBtn   = document.getElementById("chatCloseBtn");
+  var notifDot   = bubbleBtn.querySelector(".chat-notif");
+  var history    = [];
+  var isOpen     = false;
+
+  function openChat() {
+    isOpen = true;
+    chatWindow.classList.add("open");
+    notifDot.style.display = "none";
+    setTimeout(function() { inputEl.focus(); }, 300);
+  }
+  function closeChat() {
+    isOpen = false;
+    chatWindow.classList.remove("open");
+  }
+
+  bubbleBtn.addEventListener("click", function() { isOpen ? closeChat() : openChat(); });
+  closeBtn.addEventListener("click", closeChat);
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
+  }
+
+  function addMessage(role, text) {
+    var wrap = document.createElement("div");
+    wrap.className = "chat-msg " + (role === "bot" ? "bot" : "user");
+    if (role === "bot") {
+      var avatar = document.createElement("div");
+      avatar.className = "msg-avatar";
+      avatar.textContent = "🦷";
+      var bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+      bubble.innerHTML = escapeHtml(text);
+      wrap.appendChild(avatar);
+      wrap.appendChild(bubble);
+    } else {
+      var bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+      bubble.innerHTML = escapeHtml(text);
+      wrap.appendChild(bubble);
+    }
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return wrap;
+  }
+
+  function showTyping() {
+    var wrap = document.createElement("div");
+    wrap.className = "chat-msg bot";
+    wrap.id = "typingIndicator";
+    var avatar = document.createElement("div");
+    avatar.className = "msg-avatar";
+    avatar.textContent = "🦷";
+    var dots = document.createElement("div");
+    dots.className = "typing-dots";
+    dots.innerHTML = "<div class='typing-dot'></div><div class='typing-dot'></div><div class='typing-dot'></div>";
+    wrap.appendChild(avatar);
+    wrap.appendChild(dots);
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function hideTyping() {
+    var el = document.getElementById("typingIndicator");
+    if (el) el.remove();
+  }
+
+  async function sendMessage() {
+    var text = inputEl.value.trim();
+    if (!text) return;
+    inputEl.value = "";
+    inputEl.style.height = "auto";
+    sendBtn.disabled = true;
+    addMessage("user", text);
+    history.push({ role: "user", content: text });
+    showTyping();
+    try {
+      var res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          system: SYSTEM,
+          messages: history
+        })
+      });
+      var data = await res.json();
+      hideTyping();
+      if (data.content && data.content[0] && data.content[0].text) {
+        var reply = data.content[0].text;
+        history.push({ role: "assistant", content: reply });
+        addMessage("bot", reply);
+      } else {
+        throw new Error("no response");
+      }
+    } catch(e) {
+      hideTyping();
+      addMessage("bot", "Sorry, I'm having trouble connecting right now. Please call us at (03) 9123 4567 or email hello@leosdentalcare.com.au — we're happy to help! 😊");
+    }
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+
+  inputEl.addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 90) + "px";
+  });
+  inputEl.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  sendBtn.addEventListener("click", sendMessage);
+
+  // Welcome message
+  addMessage("bot", "Hi! 👋 I'm LEO's Dental Assistant. How can I help you today?\n\nFeel free to ask about our services, doctors, location, hours, or booking an appointment!");
+})();
+</script>
+
+</body>
+</html>
